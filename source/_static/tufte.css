@@ -821,6 +821,10 @@ body {
   float: right;
 }
 
+.prev-next-bottom {
+  display: none !important;
+}
+
 @media (max-width: 768px) {
   body {
     padding-left: 0% !important;

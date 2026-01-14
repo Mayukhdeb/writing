@@ -46,10 +46,13 @@ sphinx:
   - sphinxext.opengraph
   config:
     html_favicon: images/favicon.ico
-    html_baseurl: 'https://mayukhdeb.github.io/writing/'
     html_js_files:
       - custom.js
     pygments_style: native
+    html_theme_options:
+      path_to_docs: docs
+      repository_url: https://github.com/Mayukhdeb/writing
+      repository_branch: main
     ogp_site_url: "https://mayukhdeb.github.io/writing"
     ogp_image: "https://mayukhdeb.com/_images/unicorn.png"
     ogp_description_length: 200

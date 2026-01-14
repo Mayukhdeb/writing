@@ -13,7 +13,7 @@ conda env create -n cb --file environment.yml
 ## Build website
 
 ```bash
-conda activate cb && rm -rf docs/* && jupyter-book build source && cp -r source/_build/html/* docs/ && rm -rf source/_build
+conda activate cb && rm -rf docs/* && jupyter-book build source && cp -r source/_build/html/* docs/ && touch docs/.nojekyll && rm -rf source/_build
 ```
 
 This builds from `source/` and outputs HTML to `docs/` for GitHub Pages.

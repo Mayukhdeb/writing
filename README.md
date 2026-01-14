@@ -13,10 +13,10 @@ conda env create -n cb --file environment.yml
 ## Build website
 
 ```bash
-conda activate cb && rm -rf docs/* && jupyter-book build source --path-output . && mv _build/html/* docs/ && rm -rf _build
+conda activate cb && rm -rf docs/* && jupyter-book build source && cp -r source/_build/html/* docs/ && rm -rf source/_build
 ```
 
-This builds from `source/` and outputs HTML directly to `docs/` for GitHub Pages.
+This builds from `source/` and outputs HTML to `docs/` for GitHub Pages.
 
 ## Adding a new post
 

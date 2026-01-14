@@ -4,4 +4,9 @@ title: Home
 
 # Writing
 
-A thing is a think.
+Thoughts and notes.
+
+## Posts
+
+- [Zipf's Law](zipf.md)
+- [Another Post](another.md)

@@ -1,9 +1,7 @@
 format: jb-book
 root: index
-parts:
-  - caption: Posts
-    chapters:
-      - file: zipf
-      - file: another
+chapters:
+  - file: zipf
+  - file: another
 
 

@@ -780,6 +780,24 @@ body,
 
 #site-navigation {
   padding-top: calc(1.5em + 35px);
+  display: none !important;
+}
+
+.bd-sidebar {
+  display: none !important;
+}
+
+.bd-search {
+  display: none !important;
+}
+
+body {
+  padding-left: 0% !important;
+  margin-left: auto !important;
+}
+
+#main-content {
+  margin-left: 0 !important;
 }
 
 footer {

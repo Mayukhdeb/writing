@@ -17,7 +17,7 @@ html:
   use_edit_page_button: true
   use_repository_button: true
   use_issues_button: true
-  baseurl: https://mayukhdeb.github.io/writing
+  baseurl: https://mayukhdeb.github.io/writing/
   favicon: images/favicon.ico
   use_fullscreen_button: false
   comments:
@@ -46,6 +46,7 @@ sphinx:
   - sphinxext.opengraph
   config:
     html_favicon: images/favicon.ico
+    html_baseurl: 'https://mayukhdeb.github.io/writing/'
     html_js_files:
       - custom.js
     pygments_style: native

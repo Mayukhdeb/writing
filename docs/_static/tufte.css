@@ -764,6 +764,7 @@ body,
 
 .bd-toc {
   margin-top: calc(45px + 1.5em);
+  display: none !important;
 }
 
 .tocsection {

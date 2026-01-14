@@ -803,6 +803,12 @@ body {
 }
 
 @media (max-width: 768px) {
+  body {
+    padding-left: 0% !important;
+    width: 100% !important;
+    padding-right: 5% !important;
+  }
+
   .bd-search {
     display: none !important;
   }
@@ -810,6 +816,12 @@ body {
   #site-navigation {
     padding-top: 0px !important;
     margin-top: 0px !important;
+    position: relative !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .bd-sidebar {
+    position: relative !important;
   }
 
   .bd-sidenav:first-child {
@@ -823,10 +835,24 @@ body {
 
   #main-content {
     padding-top: 1em !important;
+    margin-left: 0 !important;
   }
 
   main.bd-content {
     padding-top: 0px !important;
+  }
+
+  h1 {
+    font-size: 2.5rem !important;
+    margin-top: 2rem !important;
+  }
+
+  h2 {
+    font-size: 1.8rem !important;
+  }
+
+  article {
+    padding: 2rem 0rem !important;
   }
 }
 

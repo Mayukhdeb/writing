@@ -1,8 +1,7 @@
-# _build
 *.Zone.Identifier
-# Local Netlify folder
 .netlify
 .DS_Store
 tmp
 exports
 conf.py
+source/_build

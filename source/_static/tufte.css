@@ -839,13 +839,3 @@ pre, code {
 .highlight {
   background-color: #1e1e1e !important;
 }
-
-/* Change sidebar "Writing" to "Home" */
-nav#bd-docs-nav .bd-toc-item > ul.nav.bd-sidenav > li.toctree-l1:first-child a.reference.internal {
-  font-size: 0;
-}
-
-nav#bd-docs-nav .bd-toc-item > ul.nav.bd-sidenav > li.toctree-l1:first-child a.reference.internal::after {
-  content: "Home";
-  font-size: 1.2rem;
-}

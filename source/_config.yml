@@ -57,5 +57,6 @@ sphinx:
       repository_url: https://github.com/Mayukhdeb/writing
       repository_branch: main
     ogp_site_url: "https://mayukhdeb.github.io/writing"
-    ogp_image: "https://mayukhdeb.com/_images/unicorn.png"
-    ogp_description_length: 200
+    ogp_site_name: "Writing"
+    ogp_description_length: 0
+    ogp_type: "website"

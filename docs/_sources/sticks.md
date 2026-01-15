@@ -9,6 +9,8 @@ exports:
 
 # Ten Sticks and a Gun
 
+*December, 2025*
+
 When we think of the police in India, we usually think of the [*Havildar*](https://en.wikipedia.org/wiki/Havildar). A stout man with a lathi and sometimes a stern look of authority on his face. But somewhere in the same city, there's another kind of cop—the one with the automatic rifle, the bulletproof vest, the gear that costs more than a year's salary. Same police force, wildly different equipment.
 
 Why so much variance? Why not just have fewer cops who are all armed to the teeth? Or why not go the other way—many more cops, all with sticks?

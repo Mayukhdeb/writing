@@ -4,7 +4,7 @@ title: Home
 
 # Writing
 
-Thoughts and notes.
+Thoughts and notes on things that I like to think about.
 
 ## Posts
 

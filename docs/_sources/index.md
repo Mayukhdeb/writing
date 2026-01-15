@@ -8,5 +8,4 @@ Thoughts and notes.
 
 ## Posts
 
-- [Zipf's Law](zipf.md)
-- [Another Post](another.md)
+- [Structure and Computation](structure.md)

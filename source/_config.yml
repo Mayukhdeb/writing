@@ -1,6 +1,6 @@
 # in _config.yml
 title: "Writing"
-author: "Mayukh Deb"
+author: '<a href="http://mayukhdeb.github.io">Mayukh Deb</a>'
 copyright: "2026"
 
 output:
@@ -25,7 +25,7 @@ html:
   use_fullscreen_button: false
   comments:
     hypothesis: false
-  extra_footer: ""
+  extra_footer: '<a href="http://mayukhdeb.github.io">mayukhdeb.github.io</a>'
 
 launch_buttons:
   thebe             : true

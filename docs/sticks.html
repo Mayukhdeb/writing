@@ -5,7 +5,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; Writing</title>
+<meta property="og:title" content="Ten Sticks and a Gun" />
+  
+<meta property="og:type" content="website" />
+  
+<meta property="og:url" content="https://mayukhdeb.github.io/sticks.html" />
+  
+<meta property="og:site_name" content="Writing" />
+  
+    <title>Ten Sticks and a Gun &#8212; Writing</title>
     
   <link href="_static/css/theme.css" rel="stylesheet" />
   <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -49,11 +57,19 @@
     <script src="_static/custom.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="_static/sphinx-book-theme.90c857b2bf8f3d46aa488b0ed8bf60a6.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script src="_static/custom.js"></script>
-    <link rel="canonical" href="https://mayukhdeb.github.io/writing/genindex.html" />
+    <link rel="canonical" href="https://mayukhdeb.github.io/writing/sticks.html" />
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="index" title="Index" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Structure as Computation" href="structure.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -95,14 +111,14 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="structure.html">
    Structure as Computation
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="sticks.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Ten Sticks and a Gun
   </a>
  </li>
@@ -151,6 +167,23 @@
             </button>
             
             
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/sticks.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
             <!-- Source interaction buttons -->
 
             <!-- Full screen (wrap in <a> to have style consistency -->
@@ -167,6 +200,19 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references-further-reading">
+   References/Further reading:
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -175,13 +221,49 @@
         
               <div>
                 
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- 
+  <div class="section" id="ten-sticks-and-a-gun">
+<h1>Ten Sticks and a Gun<a class="headerlink" href="#ten-sticks-and-a-gun" title="Permalink to this headline">¶</a></h1>
+<p>When we think of the police in India, we usually think of the <a class="reference external" href="https://en.wikipedia.org/wiki/Havildar"><em>Havildar</em></a>. A stout man with a lathi and sometimes a stern look of authority on his face. But somewhere in the same city, there’s another kind of cop—the one with the automatic rifle, the bulletproof vest, the gear that costs more than a year’s salary. Same police force, wildly different equipment.</p>
+<p>Why so much variance? Why not just have fewer cops who are all armed to the teeth? Or why not go the other way—many more cops, all with sticks?</p>
+<p>Turns out the Indian government ran the numbers and discovered something revolutionary: most problems can be solved with a stick and a stern look. Guns? Those are for when things have gone <em>very</em> wrong.</p>
+<p>The real insight is this: <em>ten sticks and a gun is better than two guns or twenty sticks</em></p>
+<p>Fewer cops with better guns? They can only be in a few places at once (and India is a <em>big big</em> country). More cops with only sticks? Useless when a situation actually escalates. But many haviladars spread across the city, plus a specialized unit that can rapidly deploy anywhere it’s needed? That’s the sweet spot.</p>
+<p>I stumbled on this analogy while trying to explain receptive field sizes in the visual cortex to a friend. Turns out, human vision plays the exact same optimization game.</p>
+<p>Your brain had a problem: not enough neurons to give you high-resolution vision everywhere. It had to choose between resolution and coverage. Let’s first look at the two most extreme (and terrible) options:</p>
+<p><strong>1. Maximal resolution</strong> - You get 120 samples per degree everywhere. Incredible detail, but your field of view shrinks to 5x5 degrees. Two guns, and nowhere to point them.</p>
+<p><strong>2. Maximal coverage</strong> - You get 150x150 degrees of vision. You can see everything, except that it’s all rendered in the blurriest  quality imaginable. Twenty sticks, all useless when you actually need to identify something.</p>
+<p>So what did your brain do? Ten sticks and a gun.</p>
+<p>Your peripheral vision covers your entire 150+ degree field with low resolution. One job: detect motion. “Something moved over there!” Your fovea—a tiny 5-degree spot—packs that 120 samples per degree resolution. When periphery spots something, your eyes snap over and fovea investigates.</p>
+<p>Low-acuity periphery detects. High-acuity fovea recognizes. There you go. I call this the Havildar strategy.</p>
+<div class="section" id="references-further-reading">
+<h2>References/Further reading:<a class="headerlink" href="#references-further-reading" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p><a class="reference external" href="https://openreview.net/forum?id=SJJKxrsgl">Emergence of Foveal image sampling from learning to attend in visual scenes - <em>Brian Cheung, Eric Weiss, Bruno Olshausen.</em> ICLR 2017</a></p></li>
+<li><p><a class="reference external" href="https://www.nature.com/articles/nn.2889">Metamers of the ventral stream - <em>Jeremy Freeman and Eero Simoncelli.</em> Nature Neuroscience</a></p></li>
+<li><p><a class="reference external" href="https://pubmed.ncbi.nlm.nih.gov/6483193/">Retinal ganglion cells that project to the dorsal lateral geniculate nucleus in the macaque monkey. <em>V H Perry, R Oehler and A Cowey</em></a></p></li>
+</ol>
+</div>
 </div>
 
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -192,6 +274,15 @@
 
 <div class='prev-next-bottom'>
     
+    <div id="prev">
+        <a class="left-prev" href="structure.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Structure as Computation</p>
+            </div>
+        </a>
+    </div>
 
 </div>
         

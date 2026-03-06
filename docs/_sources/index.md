@@ -10,3 +10,4 @@ Thoughts and notes on things that I like to think about.
 
 - [Structure and Computation](structure.md)
 - [Ten Sticks and a Gun](sticks.md)
+- [To Some, Bananas Aren't Enough](bananas.md)

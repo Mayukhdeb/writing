@@ -3,3 +3,4 @@ root: index
 chapters:
   - file: structure
   - file: sticks
+  - file: bananas

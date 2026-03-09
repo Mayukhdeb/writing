@@ -1,6 +1,7 @@
 # Writing
 
-This repo is inspired by [goodresearch.dev](https://goodresearch.dev). It also depends on a fork of the [`sphinx-book-theme`](https://github.com/Mayukhdeb/sphinx-book-theme).
+This repo is inspired by [goodresearch.dev](https://goodresearch.dev). 
+It also depends on a fork of the [`sphinx-book-theme`](https://github.com/Mayukhdeb/sphinx-book-theme). You'd have to make changes to that repo if you want to fix the metadata for link previews.
 
 ## Setup
 

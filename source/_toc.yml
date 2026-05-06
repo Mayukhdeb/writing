@@ -1,6 +1,7 @@
 format: jb-book
 root: index
 chapters:
+  - file: dinner-time
   - file: structure
   - file: sticks
   - file: bananas

@@ -1,5 +1,5 @@
 ---
-title: "It's always dinner time in evolution"
+title: "It's Always Dinner Time in Evolution"
 exports:
   - format: tex
     logo: false
@@ -7,7 +7,7 @@ exports:
     output: exports/dinner-time.tex
 ---
 
-# It's always dinner time in evolution
+# It's Always Dinner Time in Evolution
 
 The more I read about vision in the brain, the simpler the picture gets. Almost everything makes sense from the perspective of two objectives: find dinner, and don't become someone else's.
 

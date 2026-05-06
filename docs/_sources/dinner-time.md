@@ -35,8 +35,8 @@ References:
 
 1. [Max Wertheimer. Experimentelle studien u ̈ber das sehen von bewegung. *Zeitschrift fur psychologie*](https://www.gestalttheory.net/download/Wertheimer1912_Sehen_von_Bewegung.pdf)
 2. [Matthias Ekman, Peter Kok, and Floris P de Lange. Time-compressed preplay of anticipated
-events in human primary visual cortex. Nature communications](https://www.nature.com/articles/ncomms15276)
-3. [Olivier J Henaff, Yoon Bai, Julie A Charlton, Ian Nauhaus, Eero P Simoncelli, and Robbe LT Goris. Primary visual cortex straightens natural video trajectories. Nature communications](https://www.nature.com/articles/s41467-021-25939-z)
+events in human primary visual cortex. *Nature communications*](https://www.nature.com/articles/ncomms15276)
+3. [Olivier J Henaff, Yoon Bai, Julie A Charlton, Ian Nauhaus, Eero P Simoncelli, and Robbe LT Goris. Primary visual cortex straightens natural video trajectories. *Nature communications*](https://www.nature.com/articles/s41467-021-25939-z)
 4. [VH Perry, R Oehler, and A Cowey. Retinal ganglion cells that project to the dorsal lateral geniculate nucleus in the macaque monkey. *Neuroscience*](https://pubmed.ncbi.nlm.nih.gov/6483193/)
 5. [Horace B Barlow et al. Possible principles underlying the transformation of sensory messages](https://www.cnbc.cmu.edu/~tai/microns_papers/Barlow-SensoryCommunication-1961.pdf)
 6. [Chen, B. L., Hall, D. H., & Chklovskii, D. B. (2006). Wiring optimization can relate neuronal structure and function. *Proceedings of the National Academy of Sciences*](https://www.pnas.org/doi/10.1073/pnas.0506806103)

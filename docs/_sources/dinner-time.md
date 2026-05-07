@@ -31,7 +31,7 @@ Efficient coding assigns short neural "words" to the inputs you see most often a
 
 Hunt. Flee. Afford. Half a billion years of dinner pressure, and these are the engineering principles it produced. Meanwhile we're still building vision systems from scratch. But good artists borrow, and great artists steal — and steal we must.
 
-References:
+### References/Further reading:
 
 1. [Max Wertheimer. Experimentelle studien u ̈ber das sehen von bewegung. *Zeitschrift fur psychologie*](https://www.gestalttheory.net/download/Wertheimer1912_Sehen_von_Bewegung.pdf)
 2. [Matthias Ekman, Peter Kok, and Floris P de Lange. Time-compressed preplay of anticipated

@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog Editor</title>
+
+  <style>
+    /* ─── ET Book fonts (served from source/_static) ─── */
+    @font-face {
+      font-family: "et-book";
+      src: url("/_static/et-book/et-book-roman-line-figures/et-book-roman-line-figures.woff") format("woff"),
+           url("/_static/et-book/et-book-roman-line-figures/et-book-roman-line-figures.ttf") format("truetype");
+      font-weight: normal; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "et-book";
+      src: url("/_static/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.woff") format("woff"),
+           url("/_static/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.ttf") format("truetype");
+      font-weight: normal; font-style: italic; font-display: swap;
+    }
+    @font-face {
+      font-family: "et-book";
+      src: url("/_static/et-book/et-book-bold-line-figures/et-book-bold-line-figures.woff") format("woff"),
+           url("/_static/et-book/et-book-bold-line-figures/et-book-bold-line-figures.ttf") format("truetype");
+      font-weight: bold; font-style: normal; font-display: swap;
+    }
+
+    /* ─── Reset & layout ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; }   /* matches tufte.css */
+    body {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #151515;
+      color: #ddd;
+    }
+
+    .app { flex: 1; display: flex; overflow: hidden; min-height: 0; }
+
+    /* ─── Sidebar (sans-serif, doesn't inherit tufte) ─── */
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: #1a1a1a;
+      border-right: 1px solid #2a2a2a;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-size: 13px;
+    }
+    .sidebar-header {
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid #2a2a2a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #777;
+    }
+    .new-btn {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px;
+      background: #ddd; color: #151515;
+      border: none; border-radius: 4px; cursor: pointer;
+    }
+    .new-btn:hover { background: #fff; }
+    .post-list { flex: 1; overflow-y: auto; padding: 6px 0; }
+    .post-item {
+      padding: 8px 14px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      color: #aaa;
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+    }
+    .post-item:hover { background: #232323; color: #ddd; }
+    .post-item.active {
+      background: #262626;
+      border-left-color: #ddd;
+      color: #fff; font-weight: 500;
+    }
+    .post-item-title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .post-delete-btn {
+      opacity: 0; flex-shrink: 0;
+      background: none; border: none;
+      color: #666; cursor: pointer;
+      font-size: 14px; line-height: 1;
+      padding: 1px 5px; border-radius: 3px;
+    }
+    .post-item:hover .post-delete-btn { opacity: 1; }
+    .post-delete-btn:hover { color: #ff7a6b; background: #2a1a1a; }
+
+    /* ─── Main column (dark) ─── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+      background: #151515;
+    }
+
+    .toolbar {
+      flex-shrink: 0;
+      background: rgba(21, 21, 21, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid #2a2a2a;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+    }
+    .toolbar button {
+      font-family: inherit;
+      font-size: 12px; font-weight: 500;
+      padding: 5px 10px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #aaa;
+    }
+    .toolbar button:hover { background: #262626; color: #fff; }
+    .toolbar button:active { background: #2e2e2e; }
+    .toolbar .sep { width: 1px; height: 18px; background: #2e2e2e; margin: 0 6px; }
+    .toolbar .spacer { flex: 1; }
+    .save-status { font-size: 11px; color: #666; padding-right: 6px; min-width: 80px; text-align: right; }
+    .save-status.saving { color: #d4a44a; }
+    .save-status.saved  { color: #5cb874; }
+    .save-status.error  { color: #ff7a6b; }
+
+    /* ─── Article scroll area ─── */
+    .article-scroll { flex: 1; overflow-y: auto; }
+    .article-wrapper {
+      max-width: 50rem;
+      padding: 4rem 5rem 8rem;
+      margin: 0 auto;
+    }
+
+    /* ─── The article (Tufte typography, dark) ─── */
+    .article {
+      font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD",
+                   "Book Antiqua", Georgia, serif;
+      color: #ddd;
+      outline: none;
+      caret-color: #fff;
+    }
+    .article:focus { outline: none; }
+    .article ::selection { background: #3a3a3a; }
+
+    .article h1 {
+      font-weight: 400;
+      font-size: 3.2rem;
+      line-height: 1;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      color: #f0f0f0;
+    }
+    .article h2 {
+      font-style: italic; font-weight: 400;
+      font-size: 2.2rem; line-height: 1;
+      margin-top: 2.1rem; margin-bottom: 1.4rem;
+      color: #ebebeb;
+    }
+    .article h3 {
+      font-style: italic; font-weight: 400;
+      font-size: 1.7rem; line-height: 1;
+      margin-top: 2rem; margin-bottom: 1.4rem;
+      color: #ebebeb;
+    }
+    .article p, .article ul, .article ol, .article blockquote {
+      font-size: 1.4rem;
+      line-height: 2rem;
+      margin: 1.4rem 0;
+    }
+    .article ul, .article ol { padding-left: 2rem; }
+    .article li { margin-top: 0.25rem; }
+    .article a {
+      color: inherit;
+      text-decoration: none;
+      background: linear-gradient(currentColor, currentColor) bottom/1px 1px repeat-x;
+    }
+    .article a:hover { background: none; text-decoration: underline; }
+    .article em { font-style: italic; }
+    .article strong { font-weight: bold; color: #f0f0f0; }
+    .article blockquote {
+      border-left: 3px solid #3a3a3a;
+      padding-left: 1.2rem;
+      color: #aaa;
+    }
+    .article code {
+      font-family: SF Mono, Menlo, Consolas, monospace;
+      font-size: 1.15rem;
+      background: #232323;
+      color: #e8b76b;
+      padding: 0.05em 0.3em;
+      border-radius: 3px;
+    }
+    .article pre {
+      background: #1c1c1c;
+      border: 1px solid #2a2a2a;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 1.15rem;
+      line-height: 1.6;
+      margin: 1.4rem 0;
+    }
+    .article pre code { background: transparent; padding: 0; color: #ddd; }
+    .article hr {
+      border: 0;
+      border-top: 1px solid #333;
+      width: 55%;
+      margin: 2rem 0;
+    }
+
+    /* ─── Commit bar ─── */
+    .commit-bar {
+      background: #1a1a1a;
+      border-top: 1px solid #2a2a2a;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .commit-msg-input {
+      flex: 1;
+      padding: 7px 11px;
+      font-family: inherit;
+      font-size: 13px;
+      border: 1px solid #2e2e2e;
+      border-radius: 6px;
+      outline: none;
+      background: #232323;
+      color: #ddd;
+    }
+    .commit-msg-input:focus { border-color: #555; background: #2a2a2a; }
+    .commit-msg-input::placeholder { color: #666; }
+    .commit-btn {
+      padding: 7px 16px;
+      font-family: inherit;
+      font-size: 13px; font-weight: 600;
+      background: #ddd; color: #151515;
+      border: none; border-radius: 6px; cursor: pointer;
+    }
+    .commit-btn:hover { background: #fff; }
+    .commit-btn:disabled { background: #444; color: #888; cursor: default; }
+
+    /* ─── Empty state ─── */
+    .empty-state {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 6px;
+      color: #555;
+      font-family: et-book, Palatino, Georgia, serif;
+      font-size: 1.4rem;
+      font-style: italic;
+    }
+
+    /* ─── Toast & modal ─── */
+    .toast-msg {
+      position: fixed; bottom: 70px; left: 50%;
+      transform: translateX(-50%);
+      background: #2a2a2a; color: #f0f0f0;
+      padding: 10px 18px; border-radius: 8px;
+      font-size: 13px; z-index: 9999;
+      pointer-events: none;
+      opacity: 0; transition: opacity 0.2s;
+      max-width: 480px; text-align: center;
+      white-space: pre-wrap;
+      border: 1px solid #3a3a3a;
+    }
+    .toast-msg.show { opacity: 1; }
+    .toast-msg.error { background: #3a1818; border-color: #5a2222; color: #ff9a8a; }
+
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal {
+      background: #1f1f1f;
+      border: 1px solid #2e2e2e;
+      border-radius: 10px; padding: 24px; width: 360px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .modal h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; color: #f0f0f0; }
+    .modal label { font-size: 12px; color: #888; display: block; margin-bottom: 4px; }
+    .modal input {
+      width: 100%; padding: 8px 10px;
+      font-family: inherit; font-size: 14px;
+      border: 1px solid #2e2e2e;
+      border-radius: 6px; outline: none;
+      margin-bottom: 14px;
+      background: #2a2a2a; color: #ddd;
+    }
+    .modal input:focus { border-color: #555; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+    .modal-cancel, .modal-create {
+      padding: 7px 14px; font-family: inherit;
+      font-size: 13px; border-radius: 6px; cursor: pointer;
+    }
+    .modal-cancel { border: 1px solid #333; background: #1f1f1f; color: #aaa; }
+    .modal-cancel:hover { background: #2a2a2a; color: #ddd; }
+    .modal-create {
+      font-weight: 600; background: #ddd; color: #151515; border: none;
+    }
+    .modal-create:hover { background: #fff; }
+    .slug-preview {
+      font-size: 11px; color: #777;
+      margin-top: -10px; margin-bottom: 14px;
+      font-family: SF Mono, Menlo, monospace;
+    }
+
+    /* ─── Scrollbars ─── */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #444; }
+
+    /* ─── Build button & modal ─── */
+    .build-btn {
+      padding: 7px 14px;
+      font-family: inherit;
+      font-size: 13px; font-weight: 600;
+      background: transparent;
+      color: #ddd;
+      border: 1px solid #3a3a3a;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .build-btn:hover { background: #232323; border-color: #555; }
+    .build-btn:disabled { color: #666; border-color: #2a2a2a; cursor: default; background: transparent; }
+
+    .build-modal {
+      background: #1a1a1a;
+      border: 1px solid #2e2e2e;
+      border-radius: 10px;
+      width: min(820px, 92vw);
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+    .build-modal-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid #2a2a2a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .build-modal-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f0f0f0;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .build-elapsed { font-size: 12px; color: #888; font-weight: 400; }
+    .build-status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #d4a44a;
+      box-shadow: 0 0 0 0 rgba(212,164,74,0.6);
+      animation: pulse 1.4s infinite;
+    }
+    .build-status-dot.success { background: #5cb874; animation: none; box-shadow: none; }
+    .build-status-dot.error   { background: #ff7a6b; animation: none; box-shadow: none; }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(212,164,74,0.5); }
+      70%  { box-shadow: 0 0 0 8px rgba(212,164,74,0); }
+      100% { box-shadow: 0 0 0 0 rgba(212,164,74,0); }
+    }
+    .build-output {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 18px;
+      font-family: SF Mono, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #c0c0b8;
+      background: #131313;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 200px;
+    }
+    .build-output:empty::before {
+      content: 'Starting…';
+      color: #666;
+    }
+    .build-modal-footer {
+      padding: 10px 14px;
+      border-top: 1px solid #2a2a2a;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .build-close-btn {
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      background: #2a2a2a;
+      color: #ddd;
+      border: 1px solid #3a3a3a;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .build-close-btn:hover:not(:disabled) { background: #333; }
+    .build-close-btn:disabled { color: #666; cursor: default; }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Posts</span>
+      <button class="new-btn" id="new-btn">+ New</button>
+    </div>
+    <div class="post-list" id="post-list"></div>
+  </div>
+
+  <!-- Main column -->
+  <div class="main">
+    <div class="toolbar" id="toolbar" style="display:none">
+      <button data-cmd="h1" title="Heading 1">H1</button>
+      <button data-cmd="h2" title="Heading 2">H2</button>
+      <button data-cmd="h3" title="Heading 3">H3</button>
+      <button data-cmd="p"  title="Paragraph">¶</button>
+      <span class="sep"></span>
+      <button data-cmd="bold"   title="Bold (⌘B)"><b>B</b></button>
+      <button data-cmd="italic" title="Italic (⌘I)"><i>I</i></button>
+      <button data-cmd="link"   title="Link (⌘K)">Link</button>
+      <span class="sep"></span>
+      <button data-cmd="ul" title="Bulleted list">• List</button>
+      <button data-cmd="ol" title="Numbered list">1. List</button>
+      <button data-cmd="quote" title="Blockquote">❝</button>
+      <span class="spacer"></span>
+      <span class="save-status" id="save-status"></span>
+    </div>
+    <div class="article-scroll" id="article-scroll">
+      <div class="empty-state" id="empty-state">
+        Select a post to edit
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Commit bar -->
+<div class="commit-bar">
+  <input class="commit-msg-input" id="commit-msg" placeholder="Commit message…" autocomplete="off" />
+  <button class="build-btn" id="build-btn" title="Run build.sh">Build</button>
+  <button class="commit-btn" id="commit-btn">Commit</button>
+</div>
+
+<!-- Build modal -->
+<div class="modal-overlay hidden" id="build-overlay">
+  <div class="build-modal">
+    <div class="build-modal-header">
+      <div class="build-modal-title">
+        <span class="build-status-dot" id="build-dot"></span>
+        <span id="build-title-text">Building…</span>
+        <span class="build-elapsed" id="build-elapsed"></span>
+      </div>
+    </div>
+    <pre class="build-output" id="build-output"></pre>
+    <div class="build-modal-footer">
+      <button class="build-close-btn" id="build-close" disabled>Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- New post modal -->
+<div class="modal-overlay hidden" id="modal-overlay">
+  <div class="modal">
+    <h3>New Post</h3>
+    <label for="modal-title">Title</label>
+    <input id="modal-title" type="text" placeholder="My new post" autocomplete="off" />
+    <label for="modal-slug">Slug <span style="color:#666;font-weight:400">(filename, lowercase + hyphens)</span></label>
+    <input id="modal-slug" type="text" placeholder="my-new-post" autocomplete="off"
+           spellcheck="false" style="font-family: SF Mono, Menlo, monospace; font-size: 13px;" />
+    <div class="modal-actions">
+      <button class="modal-cancel" id="modal-cancel">Cancel</button>
+      <button class="modal-create" id="modal-create">Create</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-msg" id="toast"></div>
+
+<!-- Markdown libraries -->
+<script src="https://cdn.jsdelivr.net/npm/marked@9.1.6/marked.min.js"></script>
+<script src="https://unpkg.com/turndown@7.1.2/dist/turndown.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── Markdown ↔ HTML converters ────────────────────────────────────────────
+  marked.setOptions({ gfm: true, breaks: false, headerIds: false, mangle: false });
+
+  const turndown = new TurndownService({
+    headingStyle: 'atx',
+    bulletListMarker: '-',
+    codeBlockStyle: 'fenced',
+    emDelimiter: '*',
+    strongDelimiter: '**',
+    hr: '---',
+  });
+
+  // ── State ────────────────────────────────────────────────────────────────
+  let currentSlug = null;
+  let currentFrontmatter = '';
+  let saveTimer = null;
+  let isDirty = false;
+  let articleEl = null;
+
+  // ── DOM refs ─────────────────────────────────────────────────────────────
+  const postListEl    = document.getElementById('post-list');
+  const articleScroll = document.getElementById('article-scroll');
+  const emptyEl       = document.getElementById('empty-state');
+  const toolbarEl     = document.getElementById('toolbar');
+  const commitMsgEl   = document.getElementById('commit-msg');
+  const commitBtnEl   = document.getElementById('commit-btn');
+  const newBtnEl      = document.getElementById('new-btn');
+  const toastEl       = document.getElementById('toast');
+  const modalOverlay  = document.getElementById('modal-overlay');
+  const modalTitle    = document.getElementById('modal-title');
+  const modalSlug     = document.getElementById('modal-slug');
+  const modalCancel   = document.getElementById('modal-cancel');
+  const modalCreate   = document.getElementById('modal-create');
+
+  // ── Frontmatter helpers ──────────────────────────────────────────────────
+  function parseFrontmatter(raw) {
+    const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+    if (m) return { frontmatter: m[1], body: m[2] };
+    return { frontmatter: '', body: raw };
+  }
+  function reconstruct(fm, body) {
+    return fm ? `---\n${fm}\n---\n\n${body.replace(/^\n+/, '')}` : body;
+  }
+  function extractTitle(fm) {
+    const m = fm.match(/^title:\s*["']?(.+?)["']?\s*$/m);
+    return m ? m[1] : null;
+  }
+  function updateFrontmatterTitle(fm, title) {
+    const esc = title.replace(/"/g, '\\"');
+    if (/^title:/m.test(fm)) return fm.replace(/^title:.*$/m, `title: "${esc}"`);
+    return `title: "${esc}"\n${fm}`;
+  }
+
+  // ── Toast ────────────────────────────────────────────────────────────────
+  let toastTimer = null;
+  function showToast(msg, isError = false) {
+    toastEl.textContent = msg;
+    toastEl.className = 'toast-msg show' + (isError ? ' error' : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastEl.className = 'toast-msg'; }, 3000);
+  }
+
+  function setStatus(msg, type = '') {
+    const el = document.getElementById('save-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'save-status' + (type ? ' ' + type : '');
+  }
+
+  // ── Posts list ───────────────────────────────────────────────────────────
+  async function loadPosts() {
+    const res = await fetch('/api/posts');
+    const posts = await res.json();
+    postListEl.innerHTML = '';
+    for (const p of posts) postListEl.appendChild(makePostItem(p.slug, p.title));
+  }
+
+  function makePostItem(slug, title) {
+    const el = document.createElement('div');
+    el.className = 'post-item';
+    el.dataset.slug = slug;
+
+    const t = document.createElement('span');
+    t.className = 'post-item-title';
+    t.textContent = title;
+
+    const d = document.createElement('button');
+    d.className = 'post-delete-btn';
+    d.title = 'Delete post';
+    d.textContent = '×';
+    d.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+      await deletePost(slug);
+    });
+
+    el.append(t, d);
+    el.addEventListener('click', () => selectPost(slug));
+    return el;
+  }
+
+  function setActivePost(slug) {
+    document.querySelectorAll('.post-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.slug === slug);
+    });
+  }
+
+  // ── Select post ──────────────────────────────────────────────────────────
+  async function selectPost(slug) {
+    if (isDirty && currentSlug) await flushSave();
+    setActivePost(slug);
+
+    const res = await fetch(`/api/posts/${encodeURIComponent(slug)}`);
+    if (!res.ok) { showToast('Failed to load post', true); return; }
+    const { content } = await res.json();
+
+    const { frontmatter, body } = parseFrontmatter(content);
+    currentSlug = slug;
+    currentFrontmatter = frontmatter;
+    renderArticle(body);
+  }
+
+  // ── Render the WYSIWYG article ───────────────────────────────────────────
+  function renderArticle(markdown) {
+    toolbarEl.style.display = 'flex';
+
+    // Parse markdown → HTML
+    const html = marked.parse(markdown || '');
+
+    articleScroll.innerHTML = `
+      <div class="article-wrapper">
+        <article class="article" id="article" contenteditable="true" spellcheck="true">${html}</article>
+      </div>
+    `;
+    articleEl = document.getElementById('article');
+
+    // Use <p> for default paragraph separator (more predictable round-trip)
+    try { document.execCommand('defaultParagraphSeparator', false, 'p'); } catch (_) {}
+
+    articleEl.addEventListener('input', scheduleSave);
+    articleEl.addEventListener('keydown', handleKeydown);
+    articleEl.focus();
+    isDirty = false;
+  }
+
+  // ── Keyboard shortcuts ───────────────────────────────────────────────────
+  function handleKeydown(e) {
+    const isMod = e.metaKey || e.ctrlKey;
+    if (!isMod) return;
+
+    if (e.key === 'k' || e.key === 'K') {
+      e.preventDefault();
+      runCmd('link');
+    } else if (e.key === 's' || e.key === 'S') {
+      e.preventDefault();
+      flushSave();
+    }
+    // Cmd+B / Cmd+I work natively in contenteditable
+  }
+
+  // ── Toolbar commands ─────────────────────────────────────────────────────
+  toolbarEl.addEventListener('mousedown', (e) => {
+    // prevent toolbar from stealing selection focus
+    if (e.target.tagName === 'BUTTON') e.preventDefault();
+  });
+  toolbarEl.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-cmd]');
+    if (!btn) return;
+    runCmd(btn.dataset.cmd);
+  });
+
+  function runCmd(cmd) {
+    if (!articleEl) return;
+    articleEl.focus();
+    switch (cmd) {
+      case 'h1': case 'h2': case 'h3':
+        document.execCommand('formatBlock', false, cmd.toUpperCase()); break;
+      case 'p':
+        document.execCommand('formatBlock', false, 'P'); break;
+      case 'bold':   document.execCommand('bold'); break;
+      case 'italic': document.execCommand('italic'); break;
+      case 'ul':     document.execCommand('insertUnorderedList'); break;
+      case 'ol':     document.execCommand('insertOrderedList'); break;
+      case 'quote':  document.execCommand('formatBlock', false, 'BLOCKQUOTE'); break;
+      case 'link': {
+        const url = prompt('URL:');
+        if (url) document.execCommand('createLink', false, url);
+        break;
+      }
+    }
+    scheduleSave();
+  }
+
+  // ── Auto-save ────────────────────────────────────────────────────────────
+  function scheduleSave() {
+    isDirty = true;
+    setStatus('Unsaved…', 'saving');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(flushSave, 1400);
+  }
+
+  async function flushSave() {
+    if (!currentSlug || !articleEl) return;
+    clearTimeout(saveTimer);
+
+    // Convert HTML → markdown
+    const html = articleEl.innerHTML;
+    let body = turndown.turndown(html);
+
+    // Pull title from first H1 in the body and sync with frontmatter
+    const titleMatch = body.match(/^#\s+(.+)$/m);
+    let fm = currentFrontmatter;
+    if (titleMatch) {
+      const newTitle = titleMatch[1].trim();
+      fm = updateFrontmatterTitle(fm, newTitle);
+      currentFrontmatter = fm;
+      const item = document.querySelector(`.post-item[data-slug="${currentSlug}"] .post-item-title`);
+      if (item) item.textContent = newTitle;
+    }
+
+    const content = reconstruct(fm, body.trimEnd() + '\n');
+
+    try {
+      const res = await fetch(`/api/posts/${encodeURIComponent(currentSlug)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      });
+      if (res.ok) {
+        isDirty = false;
+        setStatus('Saved', 'saved');
+        setTimeout(() => setStatus(''), 1800);
+      } else {
+        setStatus('Save failed', 'error');
+      }
+    } catch (_) {
+      setStatus('Save failed', 'error');
+    }
+  }
+
+  // ── Delete ───────────────────────────────────────────────────────────────
+  async function deletePost(slug) {
+    const res = await fetch(`/api/posts/${encodeURIComponent(slug)}`, { method: 'DELETE' });
+    if (!res.ok) { showToast('Delete failed', true); return; }
+    if (currentSlug === slug) {
+      currentSlug = null; currentFrontmatter = ''; isDirty = false;
+      articleEl = null;
+      toolbarEl.style.display = 'none';
+      articleScroll.innerHTML = '';
+      articleScroll.appendChild(emptyEl);
+    }
+    await loadPosts();
+    showToast('Post deleted');
+  }
+
+  // ── New post ─────────────────────────────────────────────────────────────
+  function slugify(s) {
+    return s.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 60);
+  }
+
+  // Slug auto-fills from title until the user edits it manually
+  let slugManuallyEdited = false;
+  const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
+
+  newBtnEl.addEventListener('click', () => {
+    modalTitle.value = '';
+    modalSlug.value = '';
+    slugManuallyEdited = false;
+    modalOverlay.classList.remove('hidden');
+    modalTitle.focus();
+  });
+
+  modalTitle.addEventListener('input', () => {
+    if (!slugManuallyEdited) modalSlug.value = slugify(modalTitle.value);
+  });
+
+  modalSlug.addEventListener('input', () => {
+    slugManuallyEdited = modalSlug.value.length > 0;
+  });
+
+  // Allow only valid slug characters as the user types
+  modalSlug.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') return; // handled below
+    if (!/[a-z0-9-]/.test(e.key)) e.preventDefault();
+  });
+
+  modalCancel.addEventListener('click', () => modalOverlay.classList.add('hidden'));
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) modalOverlay.classList.add('hidden');
+  });
+
+  for (const el of [modalTitle, modalSlug]) {
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') modalCreate.click();
+      if (e.key === 'Escape') modalOverlay.classList.add('hidden');
+    });
+  }
+
+  modalCreate.addEventListener('click', async () => {
+    const title = modalTitle.value.trim();
+    const slug  = modalSlug.value.trim();
+    if (!title) { modalTitle.focus(); return; }
+    if (!slug)  { modalSlug.focus(); return; }
+    if (!SLUG_RE.test(slug)) {
+      showToast('Slug must be lowercase letters, numbers, or hyphens (no leading hyphen).', true);
+      modalSlug.focus();
+      return;
+    }
+
+    const res = await fetch('/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug, title }),
+    });
+    if (res.ok) {
+      modalOverlay.classList.add('hidden');
+      await loadPosts();
+      await selectPost(slug);
+    } else {
+      const { error } = await res.json();
+      showToast(error, true);
+    }
+  });
+
+  // ── Commit ───────────────────────────────────────────────────────────────
+  commitBtnEl.addEventListener('click', async () => {
+    const msg = commitMsgEl.value.trim();
+    if (!msg) { commitMsgEl.focus(); return; }
+    if (isDirty) await flushSave();
+
+    commitBtnEl.disabled = true;
+    commitBtnEl.textContent = 'Committing…';
+    try {
+      const res = await fetch('/api/commit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg }),
+      });
+      if (res.ok) {
+        const { output } = await res.json();
+        commitMsgEl.value = '';
+        showToast(`Committed: ${output.split('\n')[0]}`);
+      } else {
+        const { error } = await res.json();
+        showToast(error, true);
+      }
+    } catch (e) {
+      showToast('Commit failed: ' + e.message, true);
+    } finally {
+      commitBtnEl.disabled = false;
+      commitBtnEl.textContent = 'Commit';
+    }
+  });
+  commitMsgEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') commitBtnEl.click();
+  });
+
+  // ── Build ────────────────────────────────────────────────────────────────
+  const buildBtnEl     = document.getElementById('build-btn');
+  const buildOverlay   = document.getElementById('build-overlay');
+  const buildOutputEl  = document.getElementById('build-output');
+  const buildDotEl     = document.getElementById('build-dot');
+  const buildTitleEl   = document.getElementById('build-title-text');
+  const buildElapsedEl = document.getElementById('build-elapsed');
+  const buildCloseEl   = document.getElementById('build-close');
+
+  let buildPollTimer = null;
+
+  buildBtnEl.addEventListener('click', startBuild);
+  buildCloseEl.addEventListener('click', () => {
+    if (!buildCloseEl.disabled) buildOverlay.classList.add('hidden');
+  });
+
+  async function startBuild() {
+    if (isDirty) await flushSave();
+
+    // Reset modal state
+    buildOutputEl.textContent = '';
+    buildDotEl.className = 'build-status-dot';
+    buildTitleEl.textContent = 'Building…';
+    buildElapsedEl.textContent = '';
+    buildCloseEl.disabled = true;
+    buildOverlay.classList.remove('hidden');
+    buildBtnEl.disabled = true;
+
+    try {
+      const res = await fetch('/api/build', { method: 'POST' });
+      if (!res.ok) {
+        const { error } = await res.json();
+        showToast(error || 'Build failed to start', true);
+        finishBuild(false);
+        return;
+      }
+    } catch (e) {
+      showToast('Build failed to start: ' + e.message, true);
+      finishBuild(false);
+      return;
+    }
+
+    pollBuild();
+    buildPollTimer = setInterval(pollBuild, 800);
+  }
+
+  async function pollBuild() {
+    try {
+      const res = await fetch('/api/build');
+      const s = await res.json();
+
+      // Update output (only if it grew; avoids scroll fights)
+      if (s.output !== buildOutputEl.textContent) {
+        const atBottom = isScrolledNearBottom(buildOutputEl);
+        buildOutputEl.textContent = s.output;
+        if (atBottom) buildOutputEl.scrollTop = buildOutputEl.scrollHeight;
+      }
+      buildElapsedEl.textContent = s.elapsed ? `(${s.elapsed.toFixed(1)}s)` : '';
+
+      if (!s.running) {
+        clearInterval(buildPollTimer);
+        buildPollTimer = null;
+        const ok = s.exit_code === 0;
+        buildDotEl.className = 'build-status-dot ' + (ok ? 'success' : 'error');
+        buildTitleEl.textContent = ok ? 'Build complete' : `Build failed (exit ${s.exit_code})`;
+        buildCloseEl.disabled = false;
+        buildBtnEl.disabled = false;
+        if (ok) showToast(`Build complete in ${s.elapsed.toFixed(1)}s`);
+      }
+    } catch (_) { /* keep polling */ }
+  }
+
+  function isScrolledNearBottom(el) {
+    return el.scrollHeight - el.scrollTop - el.clientHeight < 40;
+  }
+
+  function finishBuild(success) {
+    if (buildPollTimer) { clearInterval(buildPollTimer); buildPollTimer = null; }
+    buildBtnEl.disabled = false;
+    buildCloseEl.disabled = false;
+    buildDotEl.className = 'build-status-dot ' + (success ? 'success' : 'error');
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────────────
+  loadPosts();
+})();
+</script>
+</body>
+</html>

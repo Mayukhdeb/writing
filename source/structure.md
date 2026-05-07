@@ -6,14 +6,13 @@ exports:
     template: ../templates/plain_latex_book_chapter
     output: exports/structure.tex
 ---
-
 # Structure as Computation
 
 *January 15th, 2026*
 
 On my walk to the lab, I pass hundreds of trees doing something remarkable: optimizing thousands of leaf angles to maximize sunlight. No central processor. No coordination algorithm. How?
 
-Each leaf is, in a sense, "dumb." It responds only to its immediate environment—the light it receives, the neighbors that shade it. No leaf knows the tree's overall strategy. No leaf has access to the global picture. And yet, the emergent pattern is somehow optimal. 
+Each leaf is, in a sense, "dumb." It responds only to its immediate environment—the light it receives, the neighbors that shade it. No leaf knows the tree's overall strategy. No leaf has access to the global picture. And yet, the emergent pattern is somehow optimal.
 
 The computer you're using to read this solves problems the exact opposite way: one central processor, total access to all information, explicit step-by-step calculation. Ask it to optimize leaf angles and it could do it in milliseconds. But that speed requires something the tree doesn't have: expensive, energy-hungry infrastructure to move information everywhere instantly.
 

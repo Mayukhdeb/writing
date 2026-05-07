@@ -30,3 +30,10 @@ This builds from `source/` and outputs HTML to `docs/` for GitHub Pages.
     - file: zipf
     - file: my-new-post
 ```
+
+
+## Experimental: WYSIWYG editor
+
+```bash
+python3 editor/server.py
+```

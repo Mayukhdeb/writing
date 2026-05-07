@@ -21,13 +21,13 @@ But spotting isn't catching. Once dinner bolts, you need to know where it's *goi
 
 Now flip it. You've eaten. You need to get home without something eating you.
 
-The problem is different now. You don't need to resolve a predator's whiskers — you need to notice *something fast in the corner of your eye* before it's too late. This is where the [Havildar strategy](https://www.notion.so/mayukh/link) earns its keep from the other side: the same low-resolution periphery that detected your dinner for you now detects the thing that wants you for dinner.
+The problem is different now. You don't need to resolve a predator's whiskers — you need to notice *something fast in the corner of your eye* before it's too late. This is where the [Havildar strategy](https://mayukhdeb.github.io/writing/sticks.html) earns its keep from the other side: the same low-resolution periphery that detected your dinner for you now detects the thing that wants you for dinner.
 
 **Afford**
 
 Both of these — hunting and fleeing — run on a brain that burns roughly 20 watts of power. That's nothing. And spikes are expensive, long axons are worse, and maintaining wiring is worst of all. So evolution squeezes every bit of efficiency out of the system.
 
-Efficient coding assigns short neural "words" to the inputs you see most often and long ones to the rare stuff — the same trick that makes Morse code work (short code for 'e', long one for 'q'). Receptive fields decorrelate the input in space and time so that neighboring neurons aren't wasting spikes saying the same thing twice. And the brain puts neurons that talk to each other *next to each other*, which is why you get topographic maps everywhere — retinotopy, tonotopy, somatotopy. Not elegance for its own sake. [Wiring minimization](link to structure post).
+Efficient coding assigns short neural "words" to the inputs you see most often and long ones to the rare stuff — the same trick that makes Morse code work (short code for 'e', long one for 'q'). Receptive fields decorrelate the input in space and time so that neighboring neurons aren't wasting spikes saying the same thing twice. And the brain puts neurons that talk to each other *next to each other*, which is why you get topographic maps everywhere — retinotopy, tonotopy, somatotopy. Not elegance for its own sake.
 
 Hunt. Flee. Afford. Half a billion years of dinner pressure, and these are the engineering principles it produced. Meanwhile we're still building vision systems from scratch. But good artists borrow, and great artists steal — and steal we must.
 

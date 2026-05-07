@@ -9,6 +9,8 @@ exports:
 
 # It's Always Dinner Time in Evolution
 
+*May 6th, 2026*
+
 The more I read about vision in the brain, the simpler the picture gets. Almost everything makes sense from the perspective of two objectives: find dinner, and don't become someone else's.
 
 **Hunt**

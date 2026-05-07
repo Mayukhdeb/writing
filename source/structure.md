@@ -6,6 +6,7 @@ exports:
     template: ../templates/plain_latex_book_chapter
     output: exports/structure.tex
 ---
+
 # Structure as Computation
 
 *January 15th, 2026*

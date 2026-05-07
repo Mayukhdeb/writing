@@ -15,7 +15,7 @@ The more I read about vision in the brain, the simpler the picture gets. Almost 
 
 Dinner doesn't want to be found. It hides. A deer standing still in dappled forest light is nearly invisible — evolution spent millions of years painting it that way. So how do you spot it? You wait for it to move. The visual system applies the principle of common fate: pixels that shift together belong to the same object. Camouflage works on a photograph. It fails on video.
 
-But spotting isn't catching. Once dinner bolts, you need to know where it's *going*, not where it *is*. The early visual cortex handles this with something called pre-play — it runs the movie forward a few frames before the world catches up. And the way it does this is surprisingly simple: it straightens curved trajectories in neural space so they can be extended as straight lines. Prediction becomes extrapolation. Pursuit becomes geometry.
+But spotting isn't catching. Once dinner bolts, you need to know where it's *going*, not where it *is*. The early visual cortex handles this with something called pre-play — it runs the movie forward a few frames before the world catches up. And the way it does this is surprisingly simple: it straightens curved trajectories in neural space so they can be extended as straight lines. Prediction becomes an act of extrapolation.
 
 **Flee**
 
